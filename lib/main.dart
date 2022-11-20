@@ -5,16 +5,19 @@ import 'package:magicdemo/model/workouts_model.dart';
 import 'package:magicdemo/screen/workout_screen/workout_screen.dart';
 import 'package:magicdemo/screen/workouts_screen/workouts_screen.dart';
 import 'package:magicdemo/globals.dart' as globals;
+import 'package:magicdemo/service/database_service/database_service.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(WorkoutAdapter());
   Hive.registerAdapter(SetAdapter());
-  await Hive.openBox<WorkoutsModel>(globals.workoutBoxName);
+  // await Hive.openBox<WorkoutsModel>(globals.workoutHiveBox);
 
-  runApp(
-    MaterialApp(
-      title: 'Named Routes Demo',
+  ListenableProvider(
+    create: (context) => StoreService(),
+    child: MaterialApp(
+      title: 'Magic Demo',
       // Start the app with the "/" named route. In this case, the app starts
       // on the FirstScreen widget.
       initialRoute: '/',

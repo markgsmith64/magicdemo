@@ -19,7 +19,7 @@ class WorkoutsScreen extends StatelessWidget {
               // ScaffoldMessenger.of(context).showSnackBar(
               //     const SnackBar(content: Text('This is a snackbar')));
               Box<Workout> workoutBox =
-                  Hive.box<Workout>(globals.workoutBoxName);
+                  Hive.box<Workout>(globals.workoutHiveBox);
               workoutBox.add(
                   Workout(id: 0, workoutDate: DateTime.now(), set: <Set>[]));
             },

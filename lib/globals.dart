@@ -1,3 +1,4 @@
 library magicdemo.globals;
 
-const String workoutBoxName = "workout_box_name";
+const String workoutHiveBox = "workout_hive_box";
+const String setHiveBox = "set_hive_box";

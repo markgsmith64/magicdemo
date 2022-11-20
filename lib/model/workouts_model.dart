@@ -6,6 +6,20 @@ part 'workouts_model.g.dart';
 
 const String workoutsBoxName = "workouts";
 
+@HiveType(typeId: 1)
+enum ExerciseType {
+  @HiveField(0)
+  BarbellRow,
+  @HiveField(1)
+  BenchPress,
+  @HiveField(2)
+  ShoulderPress,
+  @HiveField(3)
+  Deadlift,
+  @HiveField(4)
+  Squat,
+}
+
 @freezed
 class WorkoutsModel with _$WorkoutsModel {
   const factory WorkoutsModel({
@@ -37,8 +51,7 @@ class Set with _$Set {
     @JsonKey(name: 'id', required: true, disallowNullValue: true)
     @HiveField(0) int? id,
     @HiveField(1) DateTime? setDate,
-    @HiveField(2) List<ExerciseType>? exerciseType,
-    @HiveField(3) int? chosenExerciseId,
+    @HiveField(3) String? exerciseName,
     @HiveField(4) int? weight,
     @HiveField(5) int? reps,
   }) = _Set;
@@ -46,15 +59,15 @@ class Set with _$Set {
   factory Set.fromJson(Map<String, dynamic> json) => _$SetFromJson(json);
 }
 
-@freezed
-class ExerciseType with _$ExerciseType {
-  @HiveType(typeId: 5, adapterName: 'ExerciseTypeAdapter')
-  const factory ExerciseType({
-    @JsonKey(name: 'id', required: true, disallowNullValue: true)
-    @HiveField(0) int? id,
-    @HiveField(1) String? name,
-  }) = _ExerciseType;
+// @freezed
+// class ExerciseType with _$ExerciseType {
+//   @HiveType(typeId: 5, adapterName: 'ExerciseTypeAdapter')
+//   const factory ExerciseType({
+//     @JsonKey(name: 'id', required: true, disallowNullValue: true)
+//     @HiveField(0) int? id,
+//     @HiveField(1) String? name,
+//   }) = _ExerciseType;
 
-  factory ExerciseType.fromJson(Map<String, dynamic> json) =>
-      _$ExerciseTypeFromJson(json);
-}
+//   factory ExerciseType.fromJson(Map<String, dynamic> json) =>
+//       _$ExerciseTypeFromJson(json);
+// }

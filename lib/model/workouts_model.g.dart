@@ -6,6 +6,60 @@ part of 'workouts_model.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
+class ExerciseTypeAdapter extends TypeAdapter<ExerciseType> {
+  @override
+  final int typeId = 1;
+
+  @override
+  ExerciseType read(BinaryReader reader) {
+    switch (reader.readByte()) {
+      case 0:
+        return ExerciseType.BarbellRow;
+      case 1:
+        return ExerciseType.BenchPress;
+      case 2:
+        return ExerciseType.ShoulderPress;
+      case 3:
+        return ExerciseType.Deadlift;
+      case 4:
+        return ExerciseType.Squat;
+      default:
+        return ExerciseType.BarbellRow;
+    }
+  }
+
+  @override
+  void write(BinaryWriter writer, ExerciseType obj) {
+    switch (obj) {
+      case ExerciseType.BarbellRow:
+        writer.writeByte(0);
+        break;
+      case ExerciseType.BenchPress:
+        writer.writeByte(1);
+        break;
+      case ExerciseType.ShoulderPress:
+        writer.writeByte(2);
+        break;
+      case ExerciseType.Deadlift:
+        writer.writeByte(3);
+        break;
+      case ExerciseType.Squat:
+        writer.writeByte(4);
+        break;
+    }
+  }
+
+  @override
+  int get hashCode => typeId.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ExerciseTypeAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
+}
+
 class WorkoutAdapter extends TypeAdapter<_$_Workout> {
   @override
   final int typeId = 5;
@@ -59,8 +113,7 @@ class SetAdapter extends TypeAdapter<_$_Set> {
     return _$_Set(
       id: fields[0] as int?,
       setDate: fields[1] as DateTime?,
-      exerciseType: (fields[2] as List?)?.cast<ExerciseType>(),
-      chosenExerciseId: fields[3] as int?,
+      exerciseName: fields[3] as String?,
       weight: fields[4] as int?,
       reps: fields[5] as int?,
     );
@@ -69,19 +122,17 @@ class SetAdapter extends TypeAdapter<_$_Set> {
   @override
   void write(BinaryWriter writer, _$_Set obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(5)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
       ..write(obj.setDate)
       ..writeByte(3)
-      ..write(obj.chosenExerciseId)
+      ..write(obj.exerciseName)
       ..writeByte(4)
       ..write(obj.weight)
       ..writeByte(5)
-      ..write(obj.reps)
-      ..writeByte(2)
-      ..write(obj.exerciseType);
+      ..write(obj.reps);
   }
 
   @override
@@ -91,43 +142,6 @@ class SetAdapter extends TypeAdapter<_$_Set> {
   bool operator ==(Object other) =>
       identical(this, other) ||
       other is SetAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
-}
-
-class ExerciseTypeAdapter extends TypeAdapter<_$_ExerciseType> {
-  @override
-  final int typeId = 5;
-
-  @override
-  _$_ExerciseType read(BinaryReader reader) {
-    final numOfFields = reader.readByte();
-    final fields = <int, dynamic>{
-      for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
-    };
-    return _$_ExerciseType(
-      id: fields[0] as int?,
-      name: fields[1] as String?,
-    );
-  }
-
-  @override
-  void write(BinaryWriter writer, _$_ExerciseType obj) {
-    writer
-      ..writeByte(2)
-      ..writeByte(0)
-      ..write(obj.id)
-      ..writeByte(1)
-      ..write(obj.name);
-  }
-
-  @override
-  int get hashCode => typeId.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is ExerciseTypeAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
@@ -191,10 +205,7 @@ _$_Set _$$_SetFromJson(Map<String, dynamic> json) {
     setDate: json['setDate'] == null
         ? null
         : DateTime.parse(json['setDate'] as String),
-    exerciseType: (json['exerciseType'] as List<dynamic>?)
-        ?.map((e) => ExerciseType.fromJson(e as Map<String, dynamic>))
-        .toList(),
-    chosenExerciseId: json['chosenExerciseId'] as int?,
+    exerciseName: json['exerciseName'] as String?,
     weight: json['weight'] as int?,
     reps: json['reps'] as int?,
   );
@@ -211,35 +222,8 @@ Map<String, dynamic> _$$_SetToJson(_$_Set instance) {
 
   writeNotNull('id', instance.id);
   val['setDate'] = instance.setDate?.toIso8601String();
-  val['exerciseType'] = instance.exerciseType;
-  val['chosenExerciseId'] = instance.chosenExerciseId;
+  val['exerciseName'] = instance.exerciseName;
   val['weight'] = instance.weight;
   val['reps'] = instance.reps;
-  return val;
-}
-
-_$_ExerciseType _$$_ExerciseTypeFromJson(Map<String, dynamic> json) {
-  $checkKeys(
-    json,
-    requiredKeys: const ['id'],
-    disallowNullValues: const ['id'],
-  );
-  return _$_ExerciseType(
-    id: json['id'] as int?,
-    name: json['name'] as String?,
-  );
-}
-
-Map<String, dynamic> _$$_ExerciseTypeToJson(_$_ExerciseType instance) {
-  final val = <String, dynamic>{};
-
-  void writeNotNull(String key, dynamic value) {
-    if (value != null) {
-      val[key] = value;
-    }
-  }
-
-  writeNotNull('id', instance.id);
-  val['name'] = instance.name;
   return val;
 }
